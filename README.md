@@ -1,3 +1,5 @@
+# Windows Server HA & Policy Enforcement — NTI Capstone (2025)
+
 **Environment:** Hyper‑V • Windows Server 2025 • Windows 10 (client)  
 **Domain:** `nti.local` • **VIP (NLB):** `192.168.5.50` → `www.nti.local`
 
