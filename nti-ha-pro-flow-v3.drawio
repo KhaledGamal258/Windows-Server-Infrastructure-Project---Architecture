@@ -1,0 +1,328 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="5">
+  <diagram name="01-Architecture" id="0">
+    <mxGraphModel dx="802" dy="488" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h1" value="&lt;span style=&quot;color: rgb(212, 218, 231);&quot;&gt;Windows Server Infrastructure Project&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(71, 85, 105);&quot;&gt;Highly-available on-prem core with NLB web tier&lt;/span&gt;&amp;nbsp;— Architecture" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0EA5E9;strokeColor=#0284C7;fontColor=#FEFEFE;fontStyle=1;spacing=8;" parent="1" vertex="1">
+          <mxGeometry x="350" y="80" width="700" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="core" value="&lt;br&gt;&lt;br&gt;Core Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="140" y="280" width="560" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="dc1" value="&lt;span style=&quot;&quot;&gt;Domain Controller (DC1) AD DS • DNS • DHCP • \\dc1\Docs (Folder Redirection) • \\dc1\Dev (P: mapping)&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;nbsp;•&lt;br&gt;&lt;/span&gt;IP: 192.168.5.10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontColor=#7C2D12;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="180" y="310" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dc2" value="&lt;span style=&quot;&quot;&gt;Domain Controller (DC2) AD DS • DNS • DHCP • RAID-5 (lab) + iSCSI Target • Schema Master&lt;br&gt;&lt;/span&gt;IP: 192.168.5.20" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontColor=#7C2D12;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="440" y="310" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tag1" value="DHCP Failover: Load Balance 50/50 • MCLT 10m&amp;nbsp; • State Switchover 60m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;fontColor=#7C2D12;" parent="1" vertex="1">
+          <mxGeometry x="210" y="490" width="420" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_dc" value="Failover partnership 50/50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;dashed=1;strokeColor=#64748B;" parent="1" source="dc1" target="dc2" edge="1">
+          <mxGeometry x="0.6" y="-45" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="web" value="Web Tier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="730" y="280" width="610" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="vip" value="NLB VIP &lt;br&gt;www.nti.local → 192.168.5.50&lt;br&gt;Mode: Multicast • Affinity=None" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#6366F1;fontColor=#111827;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="885" y="317" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="web1" value="WEB1 (192.168.5.30)&lt;br&gt;&lt;span style=&quot;&quot;&gt;IIS +NLB node Binding: Host = www.nti.local&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#06B6D4;fontColor=#0C4A6E;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="822.5" y="433" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="web2" value="WEB2 (192.168.5.40)&lt;br&gt;&lt;span style=&quot;&quot;&gt;IIS + NLB node Binding: Host = www.nti.local&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#06B6D4;fontColor=#0C4A6E;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="1067.5" y="433" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="e_vw1" value="HTTP/80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" source="vip" target="web1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_vw2" value="HTTP/80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" source="vip" target="web2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="client" value="&lt;span style=&quot;&quot;&gt;Windows Client (CL1) • Domain-joined • DNS: www.nti.local → VIP&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9D5FF;strokeColor=#8B5CF6;fontColor=#1F1147;spacing=6;labelBackgroundColor=none;labelBorderColor=none;" parent="1" vertex="1">
+          <mxGeometry x="580" y="160" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dnsnote" value="DNS A: www → VIP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;fontColor=#7C2D12;" parent="1" vertex="1">
+          <mxGeometry x="885" y="287" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pnote" value="Production: enable IGMP multicast for NLB Multicast; consider ARR/reverse proxy for L7 features." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;fontColor=#7C2D12;" parent="1" vertex="1">
+          <mxGeometry x="245" y="670" width="880" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#0000CC;" edge="1" parent="1" source="client" target="vip">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="822.5" y="250" as="sourcePoint" />
+            <mxPoint x="960" y="210" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="710" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-5" value="DHCP Lease" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#0000CC;" edge="1" parent="1" source="client">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="540" y="210" as="sourcePoint" />
+            <mxPoint x="270" y="314" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-6" value="iSCSI" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#000000;dashed=1;" edge="1" parent="1" source="web1" target="dc2">
+          <mxGeometry x="-0.2172" relative="1" as="geometry">
+            <mxPoint x="770" y="545" as="sourcePoint" />
+            <mxPoint x="690" y="610" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="650" y="550" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-7" value="iSCSI" style="dashed=1;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#000000;" edge="1" parent="1" source="web2" target="dc2">
+          <mxGeometry x="0.3391" relative="1" as="geometry">
+            <mxPoint x="1015" y="580" as="sourcePoint" />
+            <mxPoint x="755" y="645" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="565" y="460" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-8" value="CORE01 — Windows Server Core • Joined to nti.local • PS Remoting / MMC mgmt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#06B6D4;fontColor=#0C4A6E;fontStyle=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="175" y="560" width="490" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4gmy6z7sqLXBP6TuHo9C-12" value="iSCSI LUNs provided by dc02 (lab) (Production: separate storage + MPIO)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;fontColor=#0c4a6e;" vertex="1" parent="1">
+          <mxGeometry x="795" y="560" width="480" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="02-Web-Request-Flow" id="1">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h2" value="Web Request Flow — Client → DNS → NLB VIP → IIS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0EA5E9;strokeColor=#0284C7;fontColor=#FEFEFE;fontStyle=1;spacing=8;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="30" width="900" height="50" />
+        </mxCell>
+        <mxCell id="client2" value="Client (CL1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="140" width="170" height="70" />
+        </mxCell>
+        <mxCell id="dnsq" value="DNS Query\nwww.nti.local?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="300" y="140" width="180" height="70" />
+        </mxCell>
+        <mxCell id="dnsr" value="DNS Answer\nA: 192.168.5.50 (VIP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="300" y="240" width="180" height="70" />
+        </mxCell>
+        <mxCell id="vip2" value="NLB VIP\n192.168.5.50" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="560" y="190" width="170" height="70" />
+        </mxCell>
+        <mxCell id="dec_d" value="Node draining?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#60A5FA;fontColor=#0F172A;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="560" y="290" width="170" height="80" />
+        </mxCell>
+        <mxCell id="w1" value="WEB1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="800" y="200" width="150" height="60" />
+        </mxCell>
+        <mxCell id="w2" value="WEB2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="800" y="300" width="150" height="60" />
+        </mxCell>
+        <mxCell id="resp" value="HTTP 200 OK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="300" width="170" height="60" />
+        </mxCell>
+        <mxCell id="s1" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="240" y="150" width="28" height="28" />
+        </mxCell>
+        <mxCell id="s2" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="500" y="210" width="28" height="28" />
+        </mxCell>
+        <mxCell id="s3" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="760" y="215" width="28" height="28" />
+        </mxCell>
+        <mxCell id="s4" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="760" y="315" width="28" height="28" />
+        </mxCell>
+        <mxCell id="e_c_dns" value="HTTP GET" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="client2" target="dnsq">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_dns_ans" value="A record" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dnsq" target="dnsr">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_to_vip" value="TCP SYN" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dnsr" target="vip2">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_vip_dec" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="vip2" target="dec_d">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_to_w1" value="No → WEB1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dec_d" target="w1">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_to_w2" value="Yes → WEB2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dec_d" target="w2">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_resp1" value="HTTP 200" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;dashed=1;strokeColor=#64748B;" parent="1" edge="1" source="w1" target="resp">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e_resp2" value="HTTP 200" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;dashed=1;strokeColor=#64748B;" parent="1" edge="1" source="w2" target="resp">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="03-DHCP-Failover-Flow" id="2">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h3" value="DHCP Failover — Load Balance with MCLT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0EA5E9;strokeColor=#0284C7;fontColor=#FEFEFE;fontStyle=1;spacing=8;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="30" width="760" height="50" />
+        </mxCell>
+        <mxCell id="cli" value="Client (CL1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="140" width="170" height="60" />
+        </mxCell>
+        <mxCell id="d1" value="DC1 DHCP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="280" y="140" width="160" height="60" />
+        </mxCell>
+        <mxCell id="d2" value="DC2 DHCP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="480" y="140" width="160" height="60" />
+        </mxCell>
+        <mxCell id="dec" value="Partner reachable?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#60A5FA;fontColor=#0F172A;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="280" y="230" width="160" height="70" />
+        </mxCell>
+        <mxCell id="mclt" value="Renew using MCLT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="480" y="230" width="160" height="60" />
+        </mxCell>
+        <mxCell id="grant" value="Offer/Ack lease" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="280" y="320" width="160" height="60" />
+        </mxCell>
+        <mxCell id="finish" value="Client obtains IP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="320" width="170" height="60" />
+        </mxCell>
+        <mxCell id="ds1" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="240" y="150" width="28" height="28" />
+        </mxCell>
+        <mxCell id="ds2" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="150" width="28" height="28" />
+        </mxCell>
+        <mxCell id="ds3" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="245" width="28" height="28" />
+        </mxCell>
+        <mxCell id="ds4" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFFFFF;strokeColor=#1E40AF;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="240" y="335" width="28" height="28" />
+        </mxCell>
+        <mxCell id="ed1" value="DISCOVER/REQUEST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="cli" target="d1">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ed2" value="Load-balance 50/50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;dashed=1;strokeColor=#64748B;" parent="1" edge="1" source="d1" target="d2">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ed3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="d1" target="dec">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ed4" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dec" target="grant">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ed5" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="dec" target="mclt">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ed6" value="ACK" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="grant" target="finish">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="04-GPO-Processing-Flow" id="3">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h4" value="GPO Processing — Loopback Replace + Delegation (Doaa)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0EA5E9;strokeColor=#0284C7;fontColor=#FEFEFE;fontStyle=1;spacing=8;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="30" width="900" height="50" />
+        </mxCell>
+        <mxCell id="login" value="User logon on SERVER (Servers OU)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="140" width="250" height="60" />
+        </mxCell>
+        <mxCell id="loop" value="Loopback = Replace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="350" y="140" width="200" height="60" />
+        </mxCell>
+        <mxCell id="apply" value="Apply server-side user policies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="600" y="140" width="230" height="60" />
+        </mxCell>
+        <mxCell id="devgpo" value="Developers GPO\n(Folder Redir, P: Drive, Block reg tools)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="240" width="350" height="90" />
+        </mxCell>
+        <mxCell id="q" value="User = Doaa?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#60A5FA;fontColor=#0F172A;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="450" y="255" width="150" height="70" />
+        </mxCell>
+        <mxCell id="noapply" value="Delegation removes &quot;Apply GPO&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="640" y="240" width="230" height="70" />
+        </mxCell>
+        <mxCell id="done" value="Result: policies applied / exception honored" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="360" y="350" width="300" height="60" />
+        </mxCell>
+        <mxCell id="ge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="login" target="loop">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="loop" target="apply">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ge3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="devgpo" target="q">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ge4" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="q" target="done">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ge5" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="q" target="noapply">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ge6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="noapply" target="done">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="05-Ops-Runbook" id="4">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h5" value="Zero-Downtime Maintenance — NLB Drain/Resume" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0EA5E9;strokeColor=#0284C7;fontColor=#FEFEFE;fontStyle=1;spacing=8;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="30" y="30" width="800" height="50" />
+        </mxCell>
+        <mxCell id="start" value="1) Start window" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="140" width="180" height="60" />
+        </mxCell>
+        <mxCell id="drain" value="2) NLB: DRAINSTOP node" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="280" y="140" width="220" height="60" />
+        </mxCell>
+        <mxCell id="patch" value="3) Patch + reboot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="540" y="140" width="200" height="60" />
+        </mxCell>
+        <mxCell id="resume" value="4) NLB: RESUME" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="240" width="180" height="60" />
+        </mxCell>
+        <mxCell id="validate" value="5) Validate VIP &amp; site (nslookup / curl)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="280" y="240" width="300" height="60" />
+        </mxCell>
+        <mxCell id="repeat" value="6) Repeat next node" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;spacing=6;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="620" y="240" width="180" height="60" />
+        </mxCell>
+        <mxCell id="note" value="STOP drops connections; DRAINSTOP preserves existing sessions." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;fontColor=#7C2D12;" parent="1" vertex="1">
+          <mxGeometry as="geometry" x="60" y="330" width="740" height="60" />
+        </mxCell>
+        <mxCell id="oe1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="start" target="drain">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="oe2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="drain" target="patch">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="oe3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="patch" target="resume">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="oe4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="resume" target="validate">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="oe5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#0EA5E9;strokeWidth=2;" parent="1" edge="1" source="validate" target="repeat">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
