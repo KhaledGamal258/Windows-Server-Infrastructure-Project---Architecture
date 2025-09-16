@@ -44,26 +44,23 @@ A compact, production‑style lab demonstrating **core directory resiliency** an
 **Key GPOs**
 - **Servers/DCs/Core — Loopback = Replace**  
   *Why:* when admins log on to servers, user settings must follow **server policy**, not workstation policy. Replace avoids conflicting UX/security settings.  
-  _Evidence:_ 
-<img width="1362" height="722" alt="GPO_Loopback" src="https://github.com/user-attachments/assets/35158fc5-da34-45be-896f-8f345bbfcce2" />
+  _Evidence:_ ![Loopback](image/GPO_Loopback.PNG)
 
 - **Developers — Folder Redirection + Drive Mapping (GPP) + Restricted Registry Tools**  
   *Why:* centralize data (`\\DC1\Docs`), provide **P:** drive, reduce risky tweaks.  
   **Delegation Exception (Doaa):** remove *Apply group policy* for user **Doaa** to demonstrate targeted exemptions.  
-  _Evidence:_
-<img width="1365" height="763" alt="GPO_folderRedir" src="https://github.com/user-attachments/assets/2fda534d-2755-456b-ac4c-24cd470f3087" />
-<img width="1362" height="718" alt="GPO_Doaa" src="https://github.com/user-attachments/assets/2939d692-d124-4b9d-b4ba-4291b9f36f4d" />
-
+  _Evidence:_ ![Delegation](image/GPO_Doaa.PNG)
+              ![Folder Mapping](image/GPO_folderRedir.PNG)
+  
 - **Clients — USB Block**  
   *Why:* baseline DLP; keeps policy surface separate from developers.
 
 **FGPP (Fine‑Grained Password Policy)**  
 Two PSOs for demonstration:  
 - `PSO-DefaultUsers` → Len≥8, Hist=12, MaxAge=60d
-  <img width="1367" height="724" alt="GPO_Pass" src="https://github.com/user-attachments/assets/33aa15e0-deaf-4388-b140-c08634d53274" />
-
+![GPOP](image/GPO_Pass.PNG)
 - `PSO-Mostafa` → Len≥14, Hist=24, MaxAge=30d (higher precedence)
-<img width="1359" height="753" alt="GPO_FGPP" src="https://github.com/user-attachments/assets/09a2799a-5134-4a0a-9adb-5f3b1d2b0196" />
+![FGPP](image/GPO_FGPP.PNG)
 
 > **Tips:** avoid deep OU nesting; prefer Security Filtering + Delegation before “Enforce”; use WMI filters sparingly.
 
@@ -73,14 +70,8 @@ Two PSOs for demonstration:
 - Shares: `\\DC1\Docs` (Folder Redirection), `\\DC1\Dev` (mapped to **P:** via GPP).  
 - **FSRM**: File Group `BlockedDocsFiles` blocks `*.exe` and `*.ps1`; apply an **Active** file screen on `C:\Docs` to prevent risky binaries in redirected folders.  
   _Evidence:_
-  <img width="1365" height="764" alt="FSRM1" src="https://github.com/user-attachments/assets/5857f9bc-4bfa-4c4e-945f-ba4ab20a79c8" />
-  <img width="1363" height="723" alt="FSRM2" src="https://github.com/user-attachments/assets/d8173951-4e11-4e79-a6a6-0834fb509446" />
-  <img width="1361" height="724" alt="FSRM3" src="https://github.com/user-attachments/assets/b00b46a2-39e4-4abc-b1bb-f04dd281a959" />
-
-
-
-  ![FSRM Groups](image/FSRM3.PNG)  
-  ![FSRM Templates](image/FSRM3.PNG)  
+  ![FSRM Groups](image/FSRM1.PNG)  
+  ![FSRM Templates](image/FSRM2.PNG)  
   ![FSRM Applied](image/FSRM3.PNG)
 
 > **Production note:** consider a dedicated file server/DFS; DC as file server is used here only for capstone demonstration.
@@ -95,15 +86,15 @@ Two PSOs for demonstration:
   repadmin /replsummary            # replication health
   netdom query fsmo                # Schema on DC2; others on DC1 (lab choice)
   ```
-  _Evidence:_ ![FSMO](docs/img/fsmo-netdom.png)
+  _Evidence:_ ![FSMO](image/FSMO.PNG)
 
 ### DHCP Failover (Load Balance 50/50)
 - Scope: `192.168.5.100–200`; Options: Router `192.168.5.1`, DNS `192.168.5.10, 192.168.5.20`, Domain `NTI.local`.  
-- Failover: **Load Balance**, **Message Authentication** enabled, **State Switchover 60m**, **MCLT 1m (lab)**.  
+- Failover: **Load Balance**, **Message Authentication** enabled, **State Switchover 60m**, **MCLT 10m **.  
   _Why MCLT:_ defines how long a partner can extend leases without full sync; small in lab to speed tests, usually higher in production.  
   _Evidence:_  
-  ![DHCP Failover](docs/img/dhcp-failover.png)  
-  ![DHCP Scope](docs/img/dhcp-scope.png)
+  ![DHCP Failover](image/DHCP Failover.PNG)  
+  ![DHCP Scope](image/DHCP.PNG)
 
 **PowerShell (equivalent)**  
 ```powershell
@@ -121,10 +112,10 @@ Add-DhcpServerv4Failover -ComputerName DC1 -Name "DC1-DC2" -PartnerServer DC2 `
 - IIS binding on both nodes to **VIP + host header** (`www.nti.local`, port 80)
 
 _Evidence:_  
-![NLB Manager](docs/img/nlb-manager.png)  
-![NLB Properties](docs/img/nlb-cluster-properties.png)  
-![IIS Binding](docs/img/iis-binding.png)  
-![DNS A Record](docs/img/dns-a-records.png)
+![NLB Manager](image/NLB.PNG)  
+![NLB Properties](image/NLB2.PNG)  
+![IIS Binding](image/Binding.PNG)  
+![DNS A Record](image/DNS.PNG)
 
 **Why NLB benefits production**  
 - **Zero‑downtime maintenance:** patch one node at a time with **Drainstop/Resume**; users stay on the VIP.  
@@ -151,7 +142,8 @@ Add-DnsServerResourceRecordA -Name "www" -ZoneName "nti.local" -IPv4Address "192
 
 ## 💽 (Lab) Storage — iSCSI Targets to Web Nodes
 - LUNs on **DC2** presented to **WEB1/WEB2** to simulate shared data consumption.  
-  _Evidence:_ ![iSCSI](docs/img/iscsi-luns.png)  
+  _Evidence:_ ![iSCSI](image/iSCI.PNG)
+  ![WEB HDD](image/WEB-HDD1.PNG)  
 - **Production note:** use **dedicated storage + MPIO**; do **not** co‑host iSCSI targets on a DC.
 
 ---
