@@ -199,9 +199,8 @@ NLB Manager & Properties • IIS Binding • DNS A Record • DHCP Failover & Sc
 
 ## 📦 Repo Structure
 ```
-docs/
-  img/
-    (screenshots + validation-sheet.png)
+Image/
+      (screenshots + validation-sheet.png)
 *.drawio          # architecture sources (open in diagrams.net)
 README.md         # this file
 ```
