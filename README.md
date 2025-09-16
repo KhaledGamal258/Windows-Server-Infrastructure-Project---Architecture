@@ -1,5 +1,3 @@
-<img width="1365" height="764" alt="FSRM1" src="https://github.com/user-attachments/assets/dedb638d-8f02-44fa-a15e-2b2ae35fa4e0" /># Windows Server HA & Policy Enforcement — NTI Capstone (2025)
-
 **Environment:** Hyper‑V • Windows Server 2025 • Windows 10 (client)  
 **Domain:** `nti.local` • **VIP (NLB):** `192.168.5.50` → `www.nti.local`
 
@@ -81,9 +79,9 @@ Two PSOs for demonstration:
 
 
 
-  ![FSRM Groups](docs/img/fsrm-file-groups.png)  
-  ![FSRM Templates](docs/img/fsrm-templates.png)  
-  ![FSRM Applied](docs/img/fsrm-applied-screen.png)
+  ![FSRM Groups](image/FSRM3.PNG)  
+  ![FSRM Templates](image/FSRM3.PNG)  
+  ![FSRM Applied](image/FSRM3.PNG)
 
 > **Production note:** consider a dedicated file server/DFS; DC as file server is used here only for capstone demonstration.
 
